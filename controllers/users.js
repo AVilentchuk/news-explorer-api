@@ -17,7 +17,6 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log(user);
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_KEY : 'placeholder',
@@ -36,7 +35,9 @@ module.exports.fetchUsers = (req, res, next) => {
 
 module.exports.fetchSelf = (req, res, next) => {
   User.findOne({ _id: req.user._id })
-    .orFail(() => { throw errors.userNotFound; })
+    .orFail(() => {
+      throw errors.userNotFound;
+    })
     .then((user) => {
       res.send({ data: user });
     })
