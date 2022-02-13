@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_KEY : 'placeholder'
     );
   } catch (err) {
-    return Promise.reject(authorizationError);
+    return next(authorizationError);
   }
   req.user = payload;
 

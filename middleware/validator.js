@@ -1,10 +1,16 @@
 const { celebrate, Joi } = require('celebrate');
 
-module.exports.signin = celebrate({
+module.exports.signupValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(),
-    name: Joi.string().required().min(2).max(30).alphanum()
+    password: Joi.string().required().min(6),
+    name: Joi.string().required().min(2).max(30)
+  })
+});
+module.exports.signinValidator = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6)
   })
 });
 

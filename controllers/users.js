@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { JWT_KEY, NODE_ENV } = process.env;
+const errors = require('../constants/errors');
 require('dotenv').config();
+
+const { JWT_KEY, NODE_ENV } = process.env;
 
 module.exports.register = (req, res, next) => {
   User.encryptAndCreateUser(req.body)
@@ -34,9 +36,7 @@ module.exports.fetchUsers = (req, res, next) => {
 
 module.exports.fetchSelf = (req, res, next) => {
   User.findOne({ _id: req.user._id })
-    .orFail(() => {
-      throw errors.userNotFound;
-    })
+    .orFail(() => { throw errors.userNotFound; })
     .then((user) => {
       res.send({ data: user });
     })

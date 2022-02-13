@@ -55,18 +55,16 @@ userSchema.statics.encryptAndCreateUser = function encryptAndCreateUser({
   email,
   password
 }) {
-  return bcrypt.hash(password, 10).then((hash) =>
-    this.create({
-      name,
-      email,
-      password: hash
-    })
-      .then((user) => this.findOne(user))
-      .catch((err) => {
-        if (err.code === 11000) return Promise.reject(errors.usedEmail);
-        return err;
-      })
-  );
+  return bcrypt.hash(password, 10).then((hash) => this.create({
+    name,
+    email,
+    password: hash
+  })
+    .then((user) => this.findOne(user))
+    .catch((err) => {
+      if (err.code === 11000) return Promise.reject(errors.usedEmail);
+      return err;
+    }));
 };
 
 module.exports = mongoose.model('User', userSchema);

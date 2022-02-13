@@ -8,8 +8,16 @@ module.exports.fetchArticles = (req, res, next) => {
 };
 
 module.exports.newArticle = (req, res) => {
-  const { keyword, title, text, date, source, link, image } = req.body;
-  console.log(req.user);
+  const {
+    keyword,
+    title,
+    text,
+    date,
+    source,
+    link,
+    image
+  } = req.body;
+
   const owner = req.user._id;
 
   Article.create({
@@ -22,19 +30,14 @@ module.exports.newArticle = (req, res) => {
     image,
     owner
   }).then((article) => {
-    Article.findOne(article).then((foundArticle) =>
-      res.status(201).send(foundArticle)
-    );
+    Article.findOne(article).then((foundArticle) => res.status(201).send(foundArticle));
   });
 };
 
 module.exports.deleteArticle = (req, res, next) => {
   const articleId = req.params.id;
   Article.checkIfOwner(articleId, req.user._id)
-    .then((item) =>
-      Article.deleteOne(item).then(
-        res.send({ message: 'Deleted successfully' })
-      )
-    )
+    .then((item) => Article.deleteOne(item)
+      .then(res.send({ message: 'Deleted successfully' })))
     .catch(next);
 };

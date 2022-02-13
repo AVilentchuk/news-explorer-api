@@ -3,6 +3,7 @@ const { errLogger } = require('./logging');
 const ServerError = require('../components/ServerError');
 
 const errorTypeCheck = (error) => {
+  console.log(error);
   const errorOut = new ServerError(error.name);
   if (error.name === 'NotFound') {
     errorOut.code = 404;
@@ -18,6 +19,7 @@ const errorTypeCheck = (error) => {
 };
 
 module.exports = (err, req, res, next) => {
+  console.log(err);
   if (isCelebrateError(err)) {
     const errorBody = err.details.get('body');
     const {

@@ -3,15 +3,14 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const auth = require('./middleware/auth');
 const errorHandler = require('./scripts/errorHandler');
 const { reqLogger } = require('./scripts/logging');
 const timeStamp = require('./middleware/requestStamp');
-const { register, login } = require('./controllers/users');
-const articles = require('./routes/articles');
-const users = require('./routes/users');
+const routes = require('./routes/index');
+const { limiter } = require('./scripts/rateLimiter');
 require('dotenv').config();
-const { PORT } = process.env;
+
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 
@@ -22,14 +21,11 @@ app.options('*', cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/newsdb');
+mongoose.connect(`${MONGO_URL}`);
 
 app.use(reqLogger, timeStamp);
 
-app.post('/signup', register);
-app.post('/signin', login);
-app.use('/articles', auth, articles);
-app.use('/users', auth, users);
+app.use(limiter, routes);
 
 app.use(errorHandler);
 
