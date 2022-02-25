@@ -12,6 +12,7 @@ module.exports.register = (req, res, next) => {
     })
     .catch(next);
 };
+
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
