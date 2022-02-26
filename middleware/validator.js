@@ -23,7 +23,7 @@ module.exports.articleValidator = celebrate({
       date: Joi.string().required().isoDate(),
       source: Joi.string().required(),
       link: Joi.string().required().uri(),
-      image: Joi.string().required()
+      image: Joi.string().uri()
     })
     .unknown(true)
 });
